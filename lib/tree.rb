@@ -86,12 +86,13 @@ class Tree
     block_given? ? nil : result
   end
 
-  def inorder(node = @root)
+  def inorder(node = @root, result = [], &block)
     return if node.nil?
 
-    inorder(node.left)
-    p node.data
-    inorder(node.right)
+    inorder(node.left, result, &block)
+    block_given? ? block.call(node) : result << node.data
+    inorder(node.right, result, &block)
+    block_given? ? nil : result
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
