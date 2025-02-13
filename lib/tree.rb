@@ -63,15 +63,21 @@ class Tree
     node
   end
 
-  def find(value, node = @root)
+  def find(value, node = @root, &block)
     return node if node.nil?
 
     if value > node.data
-      node = find(value, node.right)
+      yield if block_given?
+      node = find(value, node.right, &block)
     elsif value < node.data
-      node = find(value, node.left)
+      yield if block_given?
+      node = find(value, node.left, &block)
     end
     node
+  end
+
+  # TODO: think about how to do this recursively
+  def level_order_recur
   end
 
   def level_order_iter
@@ -112,6 +118,23 @@ class Tree
     block_given? ? block.call(node) : result << node.data
 
     block_given? ? nil : result
+  end
+
+  def height(node)
+    leaves = get_leaves_from_node(node)
+    heights = []
+    leaves.each do |leaf|
+      i = 0
+      find(leaf, node) { i += 1 }
+      heights << i
+    end
+    heights.max
+  end
+
+  def get_leaves_from_node(node)
+    result = []
+    inorder(node) { |n| result << n.data if n.left.nil? && n.right.nil? }
+    result
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
