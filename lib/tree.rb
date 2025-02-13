@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'node'
+require 'pry-byebug'
 # Implementation of a balancing BST, using no duplicate values
 class Tree
   attr_accessor :root
@@ -76,10 +77,6 @@ class Tree
     node
   end
 
-  # TODO: think about how to do this recursively
-  def level_order_recur
-  end
-
   def level_order_iter
     queue = [@root]
     result = []
@@ -141,6 +138,18 @@ class Tree
     i = 0
     find(node.data) { i += 1 }
     i
+  end
+
+  def balanced?
+    left_height = @root.left.nil? ? 0 : height(@root.left)
+    right_height = @root.right.nil? ? 0 : height(@root.right)
+    (left_height - right_height).abs < 2
+  end
+
+  def rebalance
+    new_arr = inorder
+    @root = build_tree(new_arr)
+    nil
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
