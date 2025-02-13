@@ -137,6 +137,12 @@ class Tree
     result
   end
 
+  def depth(node)
+    i = 0
+    find(node.data) { i += 1 }
+    i
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
