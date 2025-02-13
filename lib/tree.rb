@@ -38,12 +38,34 @@ class Tree
     node
   end
 
+  def delete(value, node = @root)
+    return node if node.nil?
+
+    if value > node.data
+      node.right = delete(value, node.right)
+    elsif value < node.data
+      node.left = delete(value, node.left)
+    else
+
+      return node.right if node.left.nil?
+      return node.left if node.right.nil?
+
+      succ = get_successor(node)
+      node.data = succ.data
+      node.right = delete(succ.data, node.right)
+    end
+    node
+  end
+
+  def get_successor(node)
+    node = node.right
+    node = node.left until node.nil? || node.left.nil?
+    node
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
-
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.pretty_print
