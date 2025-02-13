@@ -86,6 +86,14 @@ class Tree
     block_given? ? nil : result
   end
 
+  def inorder(node = @root)
+    return if node.nil?
+
+    inorder(node.left)
+    p node.data
+    inorder(node.right)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
