@@ -95,6 +95,25 @@ class Tree
     block_given? ? nil : result
   end
 
+  def preorder(node = @root, result = [], &block)
+    return if node.nil?
+
+    block_given? ? block.call(node) : result << node.data
+    preorder(node.left, result, &block)
+    preorder(node.right, result, &block)
+    block_given? ? nil : result
+  end
+
+  def postorder(node = @root, result = [], &block)
+    return if node.nil?
+
+    postorder(node.left, result, &block)
+    postorder(node.right, result, &block)
+    block_given? ? block.call(node) : result << node.data
+
+    block_given? ? nil : result
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
