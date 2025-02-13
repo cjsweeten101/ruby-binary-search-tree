@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'node'
-# Implementation of a balancing BST, using not duplicate values
+# Implementation of a balancing BST, using no duplicate values
 class Tree
   attr_accessor :root
 
@@ -72,6 +72,18 @@ class Tree
       node = find(value, node.left)
     end
     node
+  end
+
+  def level_order_iter
+    queue = [@root]
+    result = []
+    until queue.empty?
+      curr = queue.shift
+      block_given? ? yield(curr) : result << curr.data
+      queue << curr.left unless curr.left.nil?
+      queue << curr.right unless curr.right.nil?
+    end
+    block_given? ? nil : result
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
